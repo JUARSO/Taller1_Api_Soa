@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/reservation', reservationRouter);
+app.use('/reservations', reservationRouter);
 app.use('/spaces', spacesRouter);
 
 // catch 404 and forward to error handler
@@ -42,6 +42,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-parque = new parqueo("tecparqueo", 10);
-console.log(parqueo);
+tecParqueo = new parqueo("tecparqueo", 10);
+module.exports.tecParqueo = tecParqueo;
 module.exports = app;

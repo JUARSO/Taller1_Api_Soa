@@ -2,7 +2,7 @@ class Espacio {
 
     id;
     estado;
-    carros;
+    carro;
     static cantidadID = 0;
 
     constructor() {
@@ -16,8 +16,8 @@ class Espacio {
         }
     }
 
-    setCarros(value) {
-        this.carros = value;
+    setCarro(carro) {
+        this.carro = carro;
     }
 
 }
