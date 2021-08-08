@@ -24,11 +24,12 @@ class Espacio {
     setCarro(carro) {
         this.carro = carro;
         carro.id = this.id;
+        this.estado = 'in-use';
     }
 
-    eliminaReserva(carro){
-        this.carro = null;
-        carro = null;
+    eliminaReserva(){
+        this.carro = undefined;
+        this.estado = 'free';
     }
 
 }

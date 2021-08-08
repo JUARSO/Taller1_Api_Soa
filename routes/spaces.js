@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
     }else if(estadoQuery === 'free' || estadoQuery === 'in-use'){
         res.send(tecParqueo.filtrarEspaciosPorEstado(estadoQuery))
     }else{
-        res.status(404).send({message: "Tipo de estado no soportado"})
+        res.status(405).send({message: "Tipo de estado no soportado"})
     }
 });
 
@@ -22,7 +22,7 @@ router.get('/:id', function(req, res, next) {
     if(espacio !== undefined){
         res.send(espacio)
     }else{
-        res.status(404).send({message: "No existe un espacio con el id indicado"})
+        res.status(405).send({message: "No existe un espacio con el id indicado"})
     }
 });
 
@@ -42,7 +42,7 @@ router.put('/:id', function(req, res, next) {
         espacio.setDescripcion(req.body.description)
         res.send(espacio)
     }else{
-        res.status(404).send({message: "No existe un espacio con el id indicado"})
+        res.status(405).send({message: "No existe un espacio con el id indicado"})
     }
 });
 
@@ -55,10 +55,10 @@ router.delete('/:id', function(req, res, next) {
         if(resultado){
             res.send({message: "Se eliminó con éxito"})
         }else{
-            res.status(404).send({message: "El espacio está ocupado"})
+            res.status(405).send({message: "El espacio está ocupado"})
         }
     }else {
-        res.status(404).send({message: "No existe un espacio con el id indicado"})
+        res.status(405).send({message: "No existe un espacio con el id indicado"})
     }
 });
 

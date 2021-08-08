@@ -27,11 +27,15 @@ router.post('/', function(req, res, next) {
     }
 });
 
-router.delete('/id', function(req, res, next) {
+router.delete('/:id', function(req, res, next) {
     const tecParqueo = app.tecParqueo
-    const carro = new Carro();
     const espacio = tecParqueo.obtenerEspacioPorId(req.params.id);
-    espacio.eliminaReserva(carro);
+    if(espacio === undefined){
+        res.status(405).send({message: "No existe el espacio"})
+    }else{
+        espacio.eliminaReserva();
+        res.send({message: "Espacio desocupado"})
+    }
 });
 
 module.exports = router;
