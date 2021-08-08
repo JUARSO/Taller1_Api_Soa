@@ -27,4 +27,11 @@ router.post('/', function(req, res, next) {
     }
 });
 
+router.delete('/id', function(req, res, next) {
+    const tecParqueo = app.tecParqueo
+    const carro = new Carro();
+    const espacio = tecParqueo.obtenerEspacioPorId(req.params.id);
+    espacio.eliminaReserva(carro);
+});
+
 module.exports = router;

@@ -25,6 +25,12 @@ class Espacio {
         this.carro = carro;
         carro.id = this.id;
     }
+
+    eliminaReserva(carro){
+        this.carro = null;
+        carro = null;
+    }
+
 }
 
 module.exports = Espacio;
