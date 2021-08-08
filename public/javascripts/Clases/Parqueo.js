@@ -40,7 +40,7 @@ class Parqueo{
         if(index !== -1){
             const espacio = this.obtenerEspacioPorId(id);
             if(espacio.estado === 'free'){
-                this.listaEspacios = this.listaEspacios.slice(index);
+                this.listaEspacios.splice(index, 1);
                 return true;
             }else{
                 return false;

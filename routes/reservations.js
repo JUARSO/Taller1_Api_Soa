@@ -13,6 +13,7 @@ router.get('/', function(req, res, next) {
 /* GET home page. */
 router.post('/', function(req, res, next) {
     const tecParqueo = app.tecParqueo
+    const Carro = require('../public/javascripts/clases/Carro');
 
     const carro = new Carro();
     carro.placa = req.body.placa
