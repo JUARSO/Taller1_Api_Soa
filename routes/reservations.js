@@ -1,42 +1,61 @@
 var express = require('express');
 var router = express.Router();
 var app = require('../app')
+var cors = require('cors')
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-    const tecParqueo = app.tecParqueo
-    const carros = tecParqueo.obtenerCarros()
-    res.send(carros);
-});
-
-
-/* GET home page. */
-router.post('/', function(req, res, next) {
-    const tecParqueo = app.tecParqueo
-    const Carro = require('../public/javascripts/clases/Carro');
-
-    const carro = new Carro();
-    carro.placa = req.body.placa
-    carro.horaIngreso = new Date()
-
-    const espacio = tecParqueo.obtenerEspacioLibre()
-    if(espacio !== undefined){
-        espacio.setCarro(carro)
-        res.send({message: "Reservación exitosa"})
+router.get('/', cors(app.corsOptions), function(req, res, next) {
+    if(req.accepts('application/json')){
+        const tecParqueo = app.tecParqueo
+        const carros = tecParqueo.obtenerCarros()
+        res.send(carros);
     }else{
-        res.status(405).send({message: "No hay espacios libres"})
+        res.status(406).send()
     }
 });
 
-router.delete('/:id', function(req, res, next) {
-    const tecParqueo = app.tecParqueo
-    const espacio = tecParqueo.obtenerEspacioPorId(req.params.id);
-    if(espacio === undefined){
-        res.status(405).send({message: "No existe el espacio"})
+
+/* GET home page. */
+router.post('/', cors(app.corsOptions), function(req, res, next) {
+    if(req.accepts('application/json')){
+        const tecParqueo = app.tecParqueo
+        const Carro = require('../public/javascripts/clases/Carro');
+
+        if(req.body.placa === undefined || req.body.placa === ''){
+            res.status(400).send({message: "Es necesaria la placa"})
+        }else{
+            const carro = new Carro();
+            carro.placa = req.body.placa
+            carro.horaIngreso = new Date()
+            const espacio = tecParqueo.obtenerEspacioLibre()
+            if(espacio !== undefined){
+                espacio.setCarro(carro)
+                res.send({message: "Reservación exitosa", espacio})
+            }else{
+                res.status(409).send({message: "No hay espacios libres"})
+            }
+        }
     }else{
-        espacio.eliminaReserva();
-        res.send({message: "Espacio desocupado"})
+        res.status(406).send()
     }
 });
+
+router.delete('/:id', cors(app.corsOptions), function(req, res, next) {
+    if(req.accepts('application/json')){
+        const tecParqueo = app.tecParqueo
+        const espacio = tecParqueo.obtenerEspacioPorId(req.params.id);
+        if(espacio === undefined){
+            res.status(400).send({message: "No existe el espacio"})
+        }else{
+            espacio.eliminaReserva();
+            res.send({message: "Espacio desocupado"})
+        }
+    }else{
+        res.status(406).send()
+    }
+});
+
+router.options('/:id', cors(app.corsOptions)) // enable pre-flight request for DELETE request
+router.options('/', cors(app.corsOptions)) // enable pre-flight request for DELETE request
 
 module.exports = router;
