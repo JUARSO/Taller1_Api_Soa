@@ -16,6 +16,8 @@ class Parqueo{
         return this.listaEspacios.filter(espacio => espacio.estado === estado)
     }
 
+
+
     obtenerEspacioPorId(id){
         return this.listaEspacios.find(espacio => espacio.id == id)
     }

@@ -9,16 +9,19 @@ router.get('/', cors(app.corsOptions), function(req, res, next) {
     if(req.accepts('application/json')){
         const tecParqueo = app.tecParqueo
         const estadoQuery = req.query.state;
-        if(estadoQuery === undefined){
-            if(req.query.limit === null || req.query.offset === null){
+        if(estadoQuery === undefined) {
+            try {
+                res.send(tecParqueo.listaEspacios.slice(req.query.limit, req.query.offset))
+            } catch (error) {
                 res.send(tecParqueo.listaEspacios)
             }
-            else {
-                res.send(tecParqueo.listaEspacios.slice(req.query.limit,req.query.offset))
+        }
+        else if(estadoQuery === 'free' || estadoQuery === 'in-use'){
+            try{
+                res.send(tecParqueo.filtrarEspaciosPorEstado(estadoQuery).slice(req.query.limit, req.query.offset))
+            }catch (error){
+                res.send(tecParqueo.filtrarEspaciosPorEstado(estadoQuery))
             }
-
-        }else if(estadoQuery === 'free' || estadoQuery === 'in-use'){
-            res.send(tecParqueo.filtrarEspaciosPorEstado(estadoQuery))
         }else{
             res.status(400).send({message: "Tipo de estado no soportado"})
         }
