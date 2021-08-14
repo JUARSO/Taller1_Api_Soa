@@ -6,6 +6,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const https = require('https')
+const fs = require('fs')
 
 var corsOptions = {
   origin: 'http://localhost:3001/',
@@ -47,7 +49,16 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+
+
 tecParqueo = new parqueo("tecparqueo", 10);
 module.exports.tecParqueo = tecParqueo;
 module.exports = app;
 module.exports.corsOptions = corsOptions;
+
+
+https.createServer({  key: fs.readFileSync('./public/security/cert.key'),
+                              cert: fs.readFileSync('./public/security/cert.pem')
+                  }, app).listen(3001, () => {
+  console.log('Listening...')
+})
