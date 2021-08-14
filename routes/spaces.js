@@ -10,7 +10,13 @@ router.get('/', cors(app.corsOptions), function(req, res, next) {
         const tecParqueo = app.tecParqueo
         const estadoQuery = req.query.state;
         if(estadoQuery === undefined){
-            res.send(tecParqueo.listaEspacios)
+            if(req.query.limit === null || req.query.offset === null){
+                res.send(tecParqueo.listaEspacios)
+            }
+            else {
+                res.send(tecParqueo.listaEspacios.slice(req.query.limit,req.query.offset))
+            }
+
         }else if(estadoQuery === 'free' || estadoQuery === 'in-use'){
             res.send(tecParqueo.filtrarEspaciosPorEstado(estadoQuery))
         }else{
