@@ -7,7 +7,23 @@ var cors = require('cors')
 router.get('/', cors(app.corsOptions), function(req, res, next) {
     if(req.accepts('application/json')){
         const tecParqueo = app.tecParqueo
-        const carros = tecParqueo.obtenerCarros()
+        const fields = req.query.fields;
+        let carros = tecParqueo.obtenerCarros()
+
+        carros = JSON.parse(JSON.stringify(carros))
+        carros = carros.slice(req.query.offset).slice(0,req.query.limit);
+        if(fields) {
+            if (!fields.includes("placa")) {
+                carros.forEach(carro => {
+                    delete carro.placa
+                });
+            }
+            if (!fields.includes("horaIngreso")) {
+                carros.forEach(carro => {
+                    delete carro.horaIngreso
+                });
+            }
+        }
         res.send(carros);
     }else{
         res.status(406).send()

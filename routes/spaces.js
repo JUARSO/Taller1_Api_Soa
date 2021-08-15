@@ -9,22 +9,35 @@ router.get('/', cors(app.corsOptions), function(req, res, next) {
     if(req.accepts('application/json')){
         const tecParqueo = app.tecParqueo
         const estadoQuery = req.query.state;
-        if(estadoQuery === undefined) {
-            try {
-                res.send(tecParqueo.listaEspacios.slice(req.query.limit, req.query.offset))
-            } catch (error) {
-                res.send(tecParqueo.listaEspacios)
+        const fields = req.query.fields;
+
+        let listaEspacios = [];
+
+        listaEspacios = tecParqueo.listaEspacios;
+        listaEspacios = JSON.parse(JSON.stringify(listaEspacios))
+        if(estadoQuery){
+            listaEspacios = tecParqueo.filtrarEspaciosPorEstado(listaEspacios, estadoQuery)
+        }
+
+        if(fields){
+            if(!fields.includes("state")){
+                listaEspacios.forEach(espacio=>{
+                    delete espacio.estado
+                });
+            }
+            if(!fields.includes("car")){
+                listaEspacios.forEach(espacio=>{
+                    delete espacio.carro
+                });
+            }
+            if(!fields.includes("description")){
+                listaEspacios.forEach(espacio=>{
+                    delete espacio.descripcion
+                });
             }
         }
-        else if(estadoQuery === 'free' || estadoQuery === 'in-use'){
-            try{
-                res.send(tecParqueo.filtrarEspaciosPorEstado(estadoQuery).slice(req.query.limit, req.query.offset))
-            }catch (error){
-                res.send(tecParqueo.filtrarEspaciosPorEstado(estadoQuery))
-            }
-        }else{
-            res.status(400).send({message: "Tipo de estado no soportado"})
-        }
+        listaEspacios = listaEspacios.slice(req.query.offset).slice(0,req.query.limit);
+        res.send(listaEspacios)
     }else{
         res.status(406).send()
     }

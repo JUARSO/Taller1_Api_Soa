@@ -12,11 +12,9 @@ class Parqueo{
         }
     }
 
-    filtrarEspaciosPorEstado(estado){
-        return this.listaEspacios.filter(espacio => espacio.estado === estado)
+    filtrarEspaciosPorEstado(listaEspacios, estado){
+        return listaEspacios.filter(espacio => espacio.estado === estado)
     }
-
-
 
     obtenerEspacioPorId(id){
         return this.listaEspacios.find(espacio => espacio.id == id)
@@ -27,7 +25,7 @@ class Parqueo{
     }
 
     obtenerEspacioLibre(){
-        return this.filtrarEspaciosPorEstado('free')[0];
+        return this.filtrarEspaciosPorEstado(this.listaEspacios,'free')[0];
     }
 
     crearEspacio(){
