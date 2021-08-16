@@ -7,8 +7,8 @@ var cors = require('cors')
  * @swagger
  * tags:
  * name: Reservation
+ * description: API to manage your books.
  */
-
 
 /**
  * @swagger
