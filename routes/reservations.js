@@ -3,7 +3,76 @@ var router = express.Router();
 var app = require('../app')
 var cors = require('cors')
 
-/* GET home page. */
+/**
+ * @swagger
+ * /reservation:
+ *   get:
+ *     summary: Devuelve una lista con la lsita de espacios reservados.
+ *     description: Devuelve una lista con la lsita de espacios reservados.
+ *     parameters:
+ *       - in: path
+ *         name: Placa
+ *         required:
+ *         description: Indica si se debe de filtrar por placa.
+ *         schema:
+ *          type: string
+ *       - in: path
+ *         name: Hora de ingreso
+ *         required:
+ *         description: Indica si se debe de filtrar por placa.
+ *         schema:
+ *           type: date
+ *       - in: path
+ *         name: limit
+ *         required: false
+ *         description: Cantidad de elementos a recibir.
+ *         schema:
+ *           type: number
+ *       - in: path
+ *         name: offset
+ *         required: false
+ *         description: Numero de elemento por el cual empezar a filtrar.
+ *         schema:
+ *           type: number
+ *       - in: path
+ *         name: fields
+ *         required: false
+ *         description: Nombres de los campos a devolver.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: La listado de datos con respecto a la reservacion.
+ *         content:
+ *           application/json:
+ *             schema:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         description: El ID del espacio.
+ *                         example: 0
+ *                       carro:
+ *                         type: object
+ *                         properties:
+ *                          id:
+ *                              type: integer
+ *                              description: El ID del espacio.
+ *                              example: 0
+ *                          placa:
+ *                              type: string
+ *                              description: La placa del carro.
+ *                              example: abcd123
+ *                          horaIngreso:
+ *                              type: Date
+ *                              description: La hora de ingreso del carro.
+ *                              example: 2021-08-16T21:34:41.750Z
+ *       406:
+ *         description: Error. El cliente no acepta json.
+ *         content:
+ */
 router.get('/', cors(app.corsOptions), function(req, res, next) {
     if(req.accepts('application/json')){
         const tecParqueo = app.tecParqueo
@@ -30,7 +99,28 @@ router.get('/', cors(app.corsOptions), function(req, res, next) {
     }
 });
 
+/**
+ * @swagger
+ * /reservation:
+ *   post:
+ *     summary: Agrega una reservacion
+ *     description: Agrega una reservacion utilizando el numero de placa de este
+ *     parameters:
+ *       - in: path
+ *         name: Placa
+ *         required:
+ *         description: Indica si se debe de filtrar por placa.
+ *         schema:
+ *          type: number
 
+ *     responses:
+ *       200:
+ *         description: Respuesta con el rasultado del post
+ *         content:
+ *       406:
+ *         description: Error. El cliente no acepta el dato.
+ *         content:
+ */
 /* GET home page. */
 router.post('/', cors(app.corsOptions), function(req, res, next) {
     if(req.accepts('application/json')){
@@ -55,7 +145,28 @@ router.post('/', cors(app.corsOptions), function(req, res, next) {
         res.status(406).send()
     }
 });
+/**
+ * @swagger
+ * /reservation:
+ *   delete:
+ *     summary: Elimina una reservavion
+ *     description: Elimina una reservacion utilizando el id del espacio
+ *     parameters:
+ *       - in: path
+ *         name: Id
+ *         required:
+ *         description: Id del espacio que se utiliza
+ *         schema:
+ *          type: number
 
+ *     responses:
+ *       200:
+ *         description: Respuesta con el rasultado del delete
+ *         content:
+ *       406:
+ *         description: Error. El cliente no acepta el dato.
+ *         content:
+ */
 router.delete('/:id', cors(app.corsOptions), function(req, res, next) {
     if(req.accepts('application/json')){
         const tecParqueo = app.tecParqueo
