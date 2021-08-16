@@ -1,10 +1,81 @@
+
+
+
 var express = require('express');
 var router = express.Router();
 var app = require('../app')
 var cors = require('cors')
 var accepts = require('accepts')
 
-/* GET home page. */
+
+/**
+ * @swagger
+ * /spaces:
+ *   get:
+ *     summary: Devuelve la lista de espacios disponibles.
+ *     description: Devuelve la lista de espacios disponibles.
+ *     parameters:
+ *       - in: path
+ *         name: state
+ *         required: false
+ *         description: Indica si se debe de filtrar por estado.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: limit
+ *         required: false
+ *         description: Cantidad de elementos a recibir.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: offset
+ *         required: false
+ *         description: Numero de elemento por el cual empezar a filtrar.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: fields
+ *         required: false
+ *         description: Nombres de los campos a devolver.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: La lista de espacios.
+ *         content:
+ *           application/json:
+ *             schema:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         description: El ID del espacio.
+ *                         example: 0
+ *                       state:
+ *                         type: string
+ *                         description: El estado del espacio.
+ *                         example: free
+ *                       carro:
+ *                         type: object
+ *                         properties:
+ *                          id:
+ *                              type: integer
+ *                              description: El ID del espacio.
+ *                              example: 0
+ *                          placa:
+ *                              type: string
+ *                              description: La placa del carro.
+ *                              example: abcd123
+ *                          horaIngreso:
+ *                              type: Date
+ *                              description: La hora de ingreso del carro.
+ *                              example: 2021-08-16T21:34:41.750Z
+ *       406:
+ *         description: Error. El cliente no acepta json.
+ *         content:
+ */
 router.get('/', cors(app.corsOptions), function(req, res, next) {
     if(req.accepts('application/json')){
         const tecParqueo = app.tecParqueo
