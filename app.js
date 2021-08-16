@@ -28,6 +28,42 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+// app.js
+const swaggerJSDoc = require('swagger-jsdoc');
+
+const swaggerDefinition = {
+    openapi: '3.0.0',
+    info: {
+        title: 'Express API for JSONPlaceholder',
+        version: '1.0.0',
+        description:
+            'This is a REST API application made with Express. It retrieves data from JSONPlaceholder.',
+        license: {
+            name: 'Licensed Under MIT',
+            url: 'https://spdx.org/licenses/MIT.html',
+        },
+        contact: {
+            name: 'JSONPlaceholder',
+            url: 'https://jsonplaceholder.typicode.com',
+        },
+    },
+    servers: [
+        {
+            url: 'http://localhost:3000',
+            description: 'Development server',
+        },
+    ],
+};
+
+const options = {
+    swaggerDefinition,
+    // Paths to files containing OpenAPI definitions
+    apis: ['./routes/*.js'],
+};
+
+const swaggerSpec = swaggerJSDoc(options);
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(logger('dev'));
 app.use(express.json("application/json"));
 app.use(express.urlencoded({ extended: false }));
@@ -60,43 +96,6 @@ module.exports.tecParqueo = tecParqueo;
 module.exports = app;
 module.exports.corsOptions = corsOptions;
 
-const options = {
-    definition: {
-        openapi: "3.0.0",
-        info: {
-            title: "LogRocket Express API with Swagger",
-            version: "0.1.0",
-            description:
-                "This is a simple CRUD API application made with Express and documented with Swagger",
-            license: {
-                name: "MIT",
-                url: "https://spdx.org/licenses/MIT.html",
-            },
-            contact: {
-                name: "LogRocket",
-                url: "https://logrocket.com",
-                email: "info@email.com",
-            },
-        },
-        servers: [
-            {
-                url: "http://localhost:3000/spaces",
-            },
-            {
-                url: "http://localhost:3000/reservations",
-            },
-
-        ],
-    },
-    apis: ["./routes/spaces.js","./routes/reservations.js"],
-};
-
-const specs = swaggerJsdoc(options);
-app.use(
-    "/api-docs",
-    swaggerUi.serve,
-    swaggerUi.setup(specs)
-);
 
 https.createServer({  key: fs.readFileSync('./public/security/cert.key'),
                               cert: fs.readFileSync('./public/security/cert.pem')
