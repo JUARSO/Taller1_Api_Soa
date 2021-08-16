@@ -5,36 +5,44 @@ var cors = require('cors')
 
 /**
  * @swagger
+ * tags:
+ * name: Reservation
+ */
+
+
+/**
+ * @swagger
  * /reservation:
  *   get:
+ *     tags: [Reservation]
  *     summary: Devuelve una lista con la lsita de espacios reservados.
  *     description: Devuelve una lista con la lsita de espacios reservados.
  *     parameters:
- *       - in: path
+ *       - in: query
  *         name: Placa
  *         required:
  *         description: Indica si se debe de filtrar por placa.
  *         schema:
  *          type: string
- *       - in: path
+ *       - in: query
  *         name: Hora de ingreso
  *         required:
  *         description: Indica si se debe de filtrar por placa.
  *         schema:
  *           type: date
- *       - in: path
+ *       - in: query
  *         name: limit
  *         required: false
  *         description: Cantidad de elementos a recibir.
  *         schema:
  *           type: number
- *       - in: path
+ *       - in: query
  *         name: offset
  *         required: false
  *         description: Numero de elemento por el cual empezar a filtrar.
  *         schema:
  *           type: number
- *       - in: path
+ *       - in: query
  *         name: fields
  *         required: false
  *         description: Nombres de los campos a devolver.
@@ -103,20 +111,45 @@ router.get('/', cors(app.corsOptions), function(req, res, next) {
  * @swagger
  * /reservation:
  *   post:
+ *     tags: [Reservation]
  *     summary: Agrega una reservacion
  *     description: Agrega una reservacion utilizando el numero de placa de este
- *     parameters:
- *       - in: path
- *         name: Placa
- *         required:
- *         description: Indica si se debe de filtrar por placa.
- *         schema:
- *          type: number
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               Placa:
+ *                 type: string
+ *                 description: Indica la placa del carro.
+ *                 example: abcd1234
 
  *     responses:
  *       200:
- *         description: Respuesta con el rasultado del post
+ *         description: Respuesta con el resultado del post
  *         content:
+ *       400:
+ *         content:
+ *           application/json:
+ *             schema:
+ *                     type: object
+ *                     properties:
+ *                       message:
+ *                         type: string
+ *                         description: Mensaje de error.
+ *                         example: Es necesaria la placa
+ *       409:
+ *         content:
+ *           application/json:
+ *             schema:
+ *                     type: object
+ *                     properties:
+ *                       message:
+ *                         type: string
+ *                         description: Mensaje de error.
+ *                         example: No hay espacios libres
  *       406:
  *         description: Error. El cliente no acepta el dato.
  *         content:
@@ -147,8 +180,9 @@ router.post('/', cors(app.corsOptions), function(req, res, next) {
 });
 /**
  * @swagger
- * /reservation:
+ * /reservation/{id}:
  *   delete:
+ *     tags: [Reservation]
  *     summary: Elimina una reservavion
  *     description: Elimina una reservacion utilizando el id del espacio
  *     parameters:
@@ -163,6 +197,16 @@ router.post('/', cors(app.corsOptions), function(req, res, next) {
  *       200:
  *         description: Respuesta con el rasultado del delete
  *         content:
+ *       400:
+ *         content:
+ *           application/json:
+ *             schema:
+ *                     type: object
+ *                     properties:
+ *                       message:
+ *                         type: string
+ *                         description: Mensaje de error.
+ *                         example: No existe el espacio
  *       406:
  *         description: Error. El cliente no acepta el dato.
  *         content:
